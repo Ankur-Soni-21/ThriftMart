@@ -46,6 +46,7 @@ function Products() {
       title: "Product",
       dataIndex: "image",
       render: (text, record) => {
+        console.log(record);
         return (
           <img
             src={record?.images?.length > 0 ? record.images[0] : ""}
@@ -63,7 +64,8 @@ function Products() {
       title: "Seller",
       dataIndex: "name",
       render: (text, record) => {
-        return record.seller.name;
+        console.log(record.seller);
+        return record.seller ? record.seller.name : "N/A";
       },
     },
 
