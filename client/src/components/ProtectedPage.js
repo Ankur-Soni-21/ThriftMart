@@ -17,6 +17,8 @@ function ProtectedPage({ children }) {
   const { user } = useSelector((state) => state.users);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+
   const validateToken = async () => {
     try {
       dispatch(SetLoader(true));
@@ -25,8 +27,14 @@ function ProtectedPage({ children }) {
       if (response.success) {
         dispatch(SetUser(response.data));
       } else {
-        navigate("/login");
-        message.error(response.message);
+        if (response.message === "Session expired. Please log in again.") {
+          localStorage.removeItem("token");
+          navigate("/login");
+          message.error("You were logged out. Please log in again.");
+        } else {
+          navigate("/login");
+          message.error(response.message);
+        }
       }
     } catch (error) {
       dispatch(SetLoader(false));

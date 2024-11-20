@@ -7,9 +7,16 @@ module.exports = (req, res, next) => {
     req.body.userId = decryptedToken.userId;
     next();
   } catch (error) {
-    res.send({
-      success: false,
-      message: error.message,
-    });
+    if (error.name === 'TokenExpiredError') {
+      res.send({
+        success: false,
+        message: "Session expired. Please log in again.",
+      });
+    } else {
+      res.send({
+        success: false,
+        message: error.message,
+      });
+    }
   }
 };
